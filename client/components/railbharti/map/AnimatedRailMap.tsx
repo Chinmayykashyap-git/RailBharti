@@ -172,7 +172,7 @@ export default function AnimatedRailMap({
   // Compute station nodes with positions if paths available
   const stationNodes = (
     pathRef: React.RefObject<SVGPathElement>,
-    list: { name: string; t: number; acc?: boolean }[],
+    list: { name: string; t: number; acc: boolean }[],
   ) => {
     const path = pathRef.current;
     if (!path) return null;
