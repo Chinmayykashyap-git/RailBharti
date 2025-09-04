@@ -2,9 +2,11 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useBeep } from "@/hooks/useAudio";
 
 export default function AIControlPanel() {
   const [efficiency, setEfficiency] = useState(72);
+  const beep = useBeep();
 
   const bump = (delta: number) => {
     setEfficiency((e) => Math.max(40, Math.min(100, e + delta)));
@@ -24,6 +26,7 @@ export default function AIControlPanel() {
             <Button
               className="neon-glow-cyan"
               onClick={() => {
+                beep(880, 0.08, 0.04);
                 toast("Rerouting Rajdhani via Ajmer", { description: "ETA improved by 6%" });
                 bump(+4);
               }}
@@ -33,6 +36,7 @@ export default function AIControlPanel() {
             <Button
               variant="secondary"
               onClick={() => {
+                beep(420, 0.08, 0.04);
                 toast.warning("Track congestion simulated", { description: "Delays increased near Bhopal" });
                 bump(-6);
               }}
@@ -42,6 +46,7 @@ export default function AIControlPanel() {
             <Button
               variant="destructive"
               onClick={() => {
+                beep(220, 0.1, 0.05);
                 toast.error("Emergency alert triggered", { description: "Medical assistance required at Nagpur" });
                 bump(-10);
               }}
