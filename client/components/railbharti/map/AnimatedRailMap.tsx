@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useBeep } from "@/hooks/useAudio";
@@ -40,10 +45,46 @@ const stationsB = [
 ];
 
 const initialTrains: Train[] = [
-  { id: "12001", name: "Shatabdi", path: "A", type: "Shatabdi", speed: 120, t: 0.1, status: "On-time", occupancy: 62 },
-  { id: "12951", name: "Rajdhani", path: "B", type: "Rajdhani", speed: 130, t: 0.3, status: "Delayed", occupancy: 85 },
-  { id: "22691", name: "Superfast", path: "A", type: "Express", speed: 110, t: 0.55, status: "On-time", occupancy: 44 },
-  { id: "17018", name: "Exp", path: "B", type: "Local", speed: 100, t: 0.7, status: "On-time", occupancy: 28 },
+  {
+    id: "12001",
+    name: "Shatabdi",
+    path: "A",
+    type: "Shatabdi",
+    speed: 120,
+    t: 0.1,
+    status: "On-time",
+    occupancy: 62,
+  },
+  {
+    id: "12951",
+    name: "Rajdhani",
+    path: "B",
+    type: "Rajdhani",
+    speed: 130,
+    t: 0.3,
+    status: "Delayed",
+    occupancy: 85,
+  },
+  {
+    id: "22691",
+    name: "Superfast",
+    path: "A",
+    type: "Express",
+    speed: 110,
+    t: 0.55,
+    status: "On-time",
+    occupancy: 44,
+  },
+  {
+    id: "17018",
+    name: "Exp",
+    path: "B",
+    type: "Local",
+    speed: 100,
+    t: 0.7,
+    status: "On-time",
+    occupancy: 28,
+  },
 ];
 
 export default function AnimatedRailMap({
@@ -89,7 +130,9 @@ export default function AnimatedRailMap({
   const [showHeatmap, setShowHeatmap] = useState(true);
   const [showPredictions, setShowPredictions] = useState(true);
   const [timeOfDay, setTimeOfDay] = useState<"day" | "night">("night");
-  const [hoveredStation, setHoveredStation] = useState<null | (typeof stationsA[0] & { x?: number; y?: number })>(null);
+  const [hoveredStation, setHoveredStation] = useState<
+    null | ((typeof stationsA)[0] & { x?: number; y?: number })
+  >(null);
 
   // Simple simulation loop with play/pause and speed
   useEffect(() => {
@@ -124,19 +167,44 @@ export default function AnimatedRailMap({
       setTrains((prev) => {
         const i = Math.floor(Math.random() * prev.length);
         const t = prev[i];
-        const nextStatus = Math.random() < 0.6 ? "On-time" : Math.random() < 0.5 ? "Delayed" : "Stopped";
+        const nextStatus =
+          Math.random() < 0.6
+            ? "On-time"
+            : Math.random() < 0.5
+              ? "Delayed"
+              : "Stopped";
         const copy = [...prev];
-        copy[i] = { ...t, status: nextStatus, occupancy: Math.min(98, Math.max(10, (t.occupancy || 30) + (nextStatus === "Delayed" ? 12 : nextStatus === "Stopped" ? 25 : -8) + Math.round(Math.random() * 12 - 6))) };
+        copy[i] = {
+          ...t,
+          status: nextStatus,
+          occupancy: Math.min(
+            98,
+            Math.max(
+              10,
+              (t.occupancy || 30) +
+                (nextStatus === "Delayed"
+                  ? 12
+                  : nextStatus === "Stopped"
+                    ? 25
+                    : -8) +
+                Math.round(Math.random() * 12 - 6),
+            ),
+          ),
+        };
 
         // notify (throttled)
         if (nextStatus === "Delayed") {
           maybeNotify(() => {
-            toast.warning(`${t.name} (${t.id}) delayed`, { description: `Predicted delay on path ${t.path}` });
+            toast.warning(`${t.name} (${t.id}) delayed`, {
+              description: `Predicted delay on path ${t.path}`,
+            });
             beep(440, 0.08, 0.03);
           });
         } else if (nextStatus === "Stopped") {
           maybeNotify(() => {
-            toast.error(`${t.name} (${t.id}) stopped`, { description: `Emergency stop detected` });
+            toast.error(`${t.name} (${t.id}) stopped`, {
+              description: `Emergency stop detected`,
+            });
             beep(220, 0.12, 0.05);
           });
         } else {
@@ -208,7 +276,12 @@ export default function AnimatedRailMap({
           onMouseEnter={() => setHoveredStation({ ...s, x: p.x, y: p.y })}
           onMouseLeave={() => setHoveredStation(null)}
         >
-          <circle cx={p.x} cy={p.y} r={4} className="fill-primary drop-shadow" />
+          <circle
+            cx={p.x}
+            cy={p.y}
+            r={4}
+            className="fill-primary drop-shadow"
+          />
           <text
             x={tx}
             y={ty}
@@ -225,7 +298,11 @@ export default function AnimatedRailMap({
   const transform = `translate(${offset.x}, ${offset.y}) scale(${scale})`;
 
   // helper: compute time to reach a station for a train
-  const timeToStation = (train: Train, stationT: number, pathRef: React.RefObject<SVGPathElement>) => {
+  const timeToStation = (
+    train: Train,
+    stationT: number,
+    pathRef: React.RefObject<SVGPathElement>,
+  ) => {
     const path = pathRef.current;
     if (!path) return Infinity;
     const L = path.getTotalLength();
@@ -254,18 +331,25 @@ export default function AnimatedRailMap({
 
   // Ghost predictions for trains: show future positions as translucent circles
   const ghostTrains = useMemo(() => {
-    if (!showPredictions) return [] as { id: string; x: number; y: number; opacity: number }[];
+    if (!showPredictions)
+      return [] as { id: string; x: number; y: number; opacity: number }[];
     return trains.flatMap((t) => {
       // produce up to 3 future points
-      const points: { id: string; x: number; y: number; opacity: number }[] = [];
+      const points: { id: string; x: number; y: number; opacity: number }[] =
+        [];
       const ref = t.path === "A" ? pathARef : pathBRef;
       const path = ref.current;
       if (!path) return points;
       const L = path.getTotalLength();
       for (let s = 1; s <= 3; s++) {
-        const futureT = (t.t + (s * 0.05 * (t.speed / 120))) % 1;
+        const futureT = (t.t + s * 0.05 * (t.speed / 120)) % 1;
         const p = path.getPointAtLength(futureT * L);
-        points.push({ id: t.id + "-g" + s, x: p.x, y: p.y, opacity: 0.22 - s * 0.05 });
+        points.push({
+          id: t.id + "-g" + s,
+          x: p.x,
+          y: p.y,
+          opacity: 0.22 - s * 0.05,
+        });
       }
       return points;
     });
@@ -292,7 +376,9 @@ export default function AnimatedRailMap({
           if (now - last > 20000) {
             // announce arrival (throttled globally as well)
             maybeNotify(() => {
-              toast(`${t.name} arriving ${s.name}`, { description: `${t.id} - occupancy ${t.occupancy}%` });
+              toast(`${t.name} arriving ${s.name}`, {
+                description: `${t.id} - occupancy ${t.occupancy}%`,
+              });
               beep(880, 0.06, 0.03);
             });
             lastCrossRef.current[id] = now;
@@ -302,7 +388,9 @@ export default function AnimatedRailMap({
     });
   }, [trains, beep]);
 
-  const popupPos = hoveredStation ? svgPointToScreen(hoveredStation.x || 0, hoveredStation.y || 0) : { left: 0, top: 0 };
+  const popupPos = hoveredStation
+    ? svgPointToScreen(hoveredStation.x || 0, hoveredStation.y || 0)
+    : { left: 0, top: 0 };
 
   return (
     <div
@@ -352,12 +440,25 @@ export default function AnimatedRailMap({
       >
         <defs>
           <filter id="glowCyan" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="hsl(var(--ring))" floodOpacity="0.75" />
+            <feDropShadow
+              dx="0"
+              dy="0"
+              stdDeviation="4"
+              floodColor="hsl(var(--ring))"
+              floodOpacity="0.75"
+            />
           </filter>
         </defs>
 
         {/* Background subtle gradient changes for day/night */}
-        <rect x={0} y={0} width={viewBox.w} height={viewBox.h} fill={timeOfDay === "night" ? "#061123" : "#eaf6ff"} opacity={timeOfDay === "night" ? 1 : 0.18} />
+        <rect
+          x={0}
+          y={0}
+          width={viewBox.w}
+          height={viewBox.h}
+          fill={timeOfDay === "night" ? "#061123" : "#eaf6ff"}
+          opacity={timeOfDay === "night" ? 1 : 0.18}
+        />
 
         <g transform={transform}>
           {/* Tracks */}
@@ -380,25 +481,69 @@ export default function AnimatedRailMap({
           {showHeatmap && (
             <g>
               {(pathARef.current ? stationsA : []).map((s, i) => {
-                const path = pathARef.current!
+                const path = pathARef.current!;
                 const p = path.getPointAtLength(s.t * path.getTotalLength());
                 // occupancy estimated by averaging nearby trains
                 const occ = Math.round(
-                  Math.max(10, Math.min(95, (trains.filter((tr) => tr.path === "A").reduce((acc, tr) => acc + (tr.occupancy || 30), 0) / Math.max(1, trains.filter((tr) => tr.path === "A").length)) + (i % 3) * 6)),
+                  Math.max(
+                    10,
+                    Math.min(
+                      95,
+                      trains
+                        .filter((tr) => tr.path === "A")
+                        .reduce((acc, tr) => acc + (tr.occupancy || 30), 0) /
+                        Math.max(
+                          1,
+                          trains.filter((tr) => tr.path === "A").length,
+                        ) +
+                        (i % 3) * 6,
+                    ),
+                  ),
                 );
                 const r = 18 + (occ / 100) * 28;
                 const opacity = Math.min(0.45, 0.08 + occ / 250);
-                return <circle key={s.name + "-heat"} cx={p.x} cy={p.y} r={r} fill="hsl(var(--accent))" opacity={opacity} />;
+                return (
+                  <circle
+                    key={s.name + "-heat"}
+                    cx={p.x}
+                    cy={p.y}
+                    r={r}
+                    fill="hsl(var(--accent))"
+                    opacity={opacity}
+                  />
+                );
               })}
               {(pathBRef.current ? stationsB : []).map((s, i) => {
-                const path = pathBRef.current!
+                const path = pathBRef.current!;
                 const p = path.getPointAtLength(s.t * path.getTotalLength());
                 const occ = Math.round(
-                  Math.max(10, Math.min(95, (trains.filter((tr) => tr.path === "B").reduce((acc, tr) => acc + (tr.occupancy || 30), 0) / Math.max(1, trains.filter((tr) => tr.path === "B").length)) + (i % 2) * 8)),
+                  Math.max(
+                    10,
+                    Math.min(
+                      95,
+                      trains
+                        .filter((tr) => tr.path === "B")
+                        .reduce((acc, tr) => acc + (tr.occupancy || 30), 0) /
+                        Math.max(
+                          1,
+                          trains.filter((tr) => tr.path === "B").length,
+                        ) +
+                        (i % 2) * 8,
+                    ),
+                  ),
                 );
                 const r = 18 + (occ / 100) * 28;
                 const opacity = Math.min(0.45, 0.06 + occ / 240);
-                return <circle key={s.name + "-heatb"} cx={p.x} cy={p.y} r={r} fill="hsl(var(--primary))" opacity={opacity} />;
+                return (
+                  <circle
+                    key={s.name + "-heatb"}
+                    cx={p.x}
+                    cy={p.y}
+                    r={r}
+                    fill="hsl(var(--primary))"
+                    opacity={opacity}
+                  />
+                );
               })}
             </g>
           )}
@@ -427,8 +572,20 @@ export default function AnimatedRailMap({
           {trains.map((t) => {
             const p = getPoint(t);
             const isHighlight = highlightId && highlightId === t.id;
-            const color = t.type === "Rajdhani" ? "hsl(var(--primary))" : t.type === "Shatabdi" ? "hsl(var(--accent))" : t.type === "Express" ? "#f59e0b" : "#60a5fa";
-            const statusColor = t.status === "On-time" ? "#34d399" : t.status === "Delayed" ? "#f59e0b" : "#fb7185";
+            const color =
+              t.type === "Rajdhani"
+                ? "hsl(var(--primary))"
+                : t.type === "Shatabdi"
+                  ? "hsl(var(--accent))"
+                  : t.type === "Express"
+                    ? "#f59e0b"
+                    : "#60a5fa";
+            const statusColor =
+              t.status === "On-time"
+                ? "#34d399"
+                : t.status === "Delayed"
+                  ? "#f59e0b"
+                  : "#fb7185";
             return (
               <g
                 key={t.id}
@@ -436,7 +593,13 @@ export default function AnimatedRailMap({
                 className={cn("cursor-pointer", isHighlight && "scale-[1.12]")}
                 onClick={() => setSelected(t)}
               >
-                <circle r={9} fill={color} stroke={statusColor} strokeWidth={2} filter="url(#glowCyan)" />
+                <circle
+                  r={9}
+                  fill={color}
+                  stroke={statusColor}
+                  strokeWidth={2}
+                  filter="url(#glowCyan)"
+                />
                 <rect
                   x={-16}
                   y={-6}
@@ -467,22 +630,36 @@ export default function AnimatedRailMap({
           style={{ left: popupPos.left + 8, top: popupPos.top - 40 } as any}
         >
           <div className="rounded-md bg-card/90 border border-border/60 p-3 shadow-lg w-44 text-sm text-muted-foreground">
-            <div className="font-semibold text-foreground">{hoveredStation.name}</div>
-            <div className="text-xs mt-1">Accessibility: {hoveredStation.acc ? "Yes" : "Partial"}</div>
+            <div className="font-semibold text-foreground">
+              {hoveredStation.name}
+            </div>
+            <div className="text-xs mt-1">
+              Accessibility: {hoveredStation.acc ? "Yes" : "Partial"}
+            </div>
             <div className="text-xs mt-2">Upcoming:</div>
             <ul className="text-xs">
-              {(trains
-                .filter((tr) => tr.path === (stationsA.some((s) => s.name === hoveredStation.name) ? "A" : "B"))
+              {trains
+                .filter(
+                  (tr) =>
+                    tr.path ===
+                    (stationsA.some((s) => s.name === hoveredStation.name)
+                      ? "A"
+                      : "B"),
+                )
                 .slice(0, 3)
                 .map((tr) => {
-                  const mins = timeToStation(tr, hoveredStation.t, tr.path === "A" ? pathARef : pathBRef);
+                  const mins = timeToStation(
+                    tr,
+                    hoveredStation.t,
+                    tr.path === "A" ? pathARef : pathBRef,
+                  );
                   return (
                     <li key={tr.id} className="flex justify-between">
                       <span>{tr.name}</span>
                       <span className="text-muted-foreground">{mins}m</span>
                     </li>
                   );
-                }))}
+                })}
             </ul>
           </div>
         </div>
@@ -500,9 +677,12 @@ export default function AnimatedRailMap({
                   <span
                     className={cn(
                       "text-xs px-2 py-1 rounded-full",
-                      selected.status === "On-time" && "bg-emerald-400/20 text-emerald-300",
-                      selected.status === "Delayed" && "bg-amber-400/20 text-amber-300",
-                      selected.status === "Stopped" && "bg-rose-400/20 text-rose-300",
+                      selected.status === "On-time" &&
+                        "bg-emerald-400/20 text-emerald-300",
+                      selected.status === "Delayed" &&
+                        "bg-amber-400/20 text-amber-300",
+                      selected.status === "Stopped" &&
+                        "bg-rose-400/20 text-rose-300",
                     )}
                   >
                     {selected.status}
@@ -514,13 +694,21 @@ export default function AnimatedRailMap({
                 <div>Type: {selected.type}</div>
                 <div>Occupancy: {selected.occupancy}%</div>
                 <div>Speed: {selected.speed} px/s</div>
-                <div>ETA (simulated): {Math.round((1 - selected.t) * 120)} min</div>
+                <div>
+                  ETA (simulated): {Math.round((1 - selected.t) * 120)} min
+                </div>
                 <div className="flex gap-2 mt-2">
                   <button
                     className="rounded-md bg-primary text-primary-foreground px-3 py-1 neon-glow-cyan"
                     onClick={() => {
                       // simple simulate reroute: boost speed temporarily
-                      setTrains((prev) => prev.map((p) => (p.id === selected.id ? { ...p, speed: p.speed + 40 } : p)));
+                      setTrains((prev) =>
+                        prev.map((p) =>
+                          p.id === selected.id
+                            ? { ...p, speed: p.speed + 40 }
+                            : p,
+                        ),
+                      );
                       toast.success("Reroute simulated — speed boosted");
                       beep(900, 0.06, 0.04);
                     }}
@@ -531,7 +719,9 @@ export default function AnimatedRailMap({
                     className="rounded-md bg-secondary/70 px-3 py-1"
                     onClick={() => {
                       // animate step-by-step journey visualization by temporarily highlighting prediction
-                      toast("Visualizing journey", { description: "Step-by-step animation started" });
+                      toast("Visualizing journey", {
+                        description: "Step-by-step animation started",
+                      });
                     }}
                   >
                     Visualize Journey

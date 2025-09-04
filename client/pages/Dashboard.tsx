@@ -6,7 +6,9 @@ export default function Dashboard() {
     <div>
       <div className="container pt-8">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">System-wide status and predictions</p>
+        <p className="text-muted-foreground">
+          System-wide status and predictions
+        </p>
       </div>
       <div className="container mt-6">
         <AnimatedRailMap height={360} />

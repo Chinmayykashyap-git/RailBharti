@@ -33,7 +33,8 @@ export default function Hero() {
               — Indian Rail Essence
             </h1>
             <p className="mt-4 text-muted-foreground max-w-prose">
-              A modern, interactive, AI-powered railway prototype with real-time train motion, predictions, and a futuristic neon interface.
+              A modern, interactive, AI-powered railway prototype with real-time
+              train motion, predictions, and a futuristic neon interface.
             </p>
             <form onSubmit={onSearch} className="mt-6 flex gap-2">
               <input
@@ -42,7 +43,9 @@ export default function Hero() {
                 placeholder="Search train by number, name, or route"
                 className="w-full rounded-md bg-secondary/60 border border-border/60 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/60"
               />
-              <Button className="neon-glow-cyan" type="submit">Search</Button>
+              <Button className="neon-glow-cyan" type="submit">
+                Search
+              </Button>
             </form>
             <div className="mt-3 text-xs text-muted-foreground">
               Try: 12001, 12951, Shatabdi, Rajdhani

@@ -15,7 +15,9 @@ export default function AIControlPanel() {
   return (
     <section className="container py-10">
       <h2 className="text-2xl md:text-3xl font-bold">AI Control Panel</h2>
-      <p className="text-muted-foreground mt-1">Simulate reroutes, congestion, and emergency scenarios</p>
+      <p className="text-muted-foreground mt-1">
+        Simulate reroutes, congestion, and emergency scenarios
+      </p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <Card className="bg-secondary/50 border-border/60">
@@ -27,7 +29,9 @@ export default function AIControlPanel() {
               className="neon-glow-cyan"
               onClick={() => {
                 beep(880, 0.08, 0.04);
-                toast("Rerouting Rajdhani via Ajmer", { description: "ETA improved by 6%" });
+                toast("Rerouting Rajdhani via Ajmer", {
+                  description: "ETA improved by 6%",
+                });
                 bump(+4);
               }}
             >
@@ -37,7 +41,9 @@ export default function AIControlPanel() {
               variant="secondary"
               onClick={() => {
                 beep(420, 0.08, 0.04);
-                toast.warning("Track congestion simulated", { description: "Delays increased near Bhopal" });
+                toast.warning("Track congestion simulated", {
+                  description: "Delays increased near Bhopal",
+                });
                 bump(-6);
               }}
             >
@@ -47,7 +53,9 @@ export default function AIControlPanel() {
               variant="destructive"
               onClick={() => {
                 beep(220, 0.1, 0.05);
-                toast.error("Emergency alert triggered", { description: "Medical assistance required at Nagpur" });
+                toast.error("Emergency alert triggered", {
+                  description: "Medical assistance required at Nagpur",
+                });
                 bump(-10);
               }}
             >
@@ -60,14 +68,19 @@ export default function AIControlPanel() {
             <CardTitle>Efficiency Improvement</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-sm text-muted-foreground mb-2">Overall scheduling efficiency</div>
+            <div className="text-sm text-muted-foreground mb-2">
+              Overall scheduling efficiency
+            </div>
             <div className="h-3 w-full rounded bg-secondary/60 overflow-hidden">
               <div
                 className="h-full bg-[hsl(var(--primary))] transition-all"
                 style={{ width: `${efficiency}%` }}
               />
             </div>
-            <div className="mt-2 text-sm"><span className="font-semibold text-primary">{efficiency}%</span> optimized</div>
+            <div className="mt-2 text-sm">
+              <span className="font-semibold text-primary">{efficiency}%</span>{" "}
+              optimized
+            </div>
           </CardContent>
         </Card>
       </div>

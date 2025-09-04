@@ -11,7 +11,8 @@ export function SiteFooter() {
             Railभारती 🚆
           </div>
           <p className="mt-3 text-sm text-muted-foreground max-w-sm">
-            Indian Rail Essence — a futuristic, interactive prototype for real-time train tracking and AI-powered insights.
+            Indian Rail Essence — a futuristic, interactive prototype for
+            real-time train tracking and AI-powered insights.
           </p>
           <div className="mt-4 flex gap-3">
             <a
@@ -41,8 +42,12 @@ export function SiteFooter() {
         <div className="container py-4 text-xs text-muted-foreground flex items-center justify-between">
           <span>�� {new Date().getFullYear()} Railभारती</span>
           <nav className="flex gap-4">
-            <Link to="/about" className="hover:text-primary">About</Link>
-            <Link to="/contact" className="hover:text-primary">Contact</Link>
+            <Link to="/about" className="hover:text-primary">
+              About
+            </Link>
+            <Link to="/contact" className="hover:text-primary">
+              Contact
+            </Link>
           </nav>
         </div>
       </div>

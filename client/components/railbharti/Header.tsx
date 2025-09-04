@@ -129,7 +129,8 @@ export function SiteHeader() {
                         transitionDuration: "0.15s",
                         transitionProperty:
                           "color, background-color, border-color, text-decoration-color, fill, stroke",
-                        transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                        transitionTimingFunction:
+                          "cubic-bezier(0.4, 0, 0.2, 1)",
                       }
                     : undefined
                 }
