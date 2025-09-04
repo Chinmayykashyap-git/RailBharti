@@ -106,33 +106,30 @@ export default function AnimatedRailMap({
 
   // Periodically simulate random delays and notify
   useEffect(() => {
+    // Update exactly one train every 5 seconds
     const id = setInterval(() => {
       setTrains((prev) => {
-        // 20% chance to update a random train status
-        if (Math.random() < 0.2) {
-          const i = Math.floor(Math.random() * prev.length);
-          const t = prev[i];
-          const nextStatus = Math.random() < 0.6 ? "On-time" : Math.random() < 0.5 ? "Delayed" : "Stopped";
-          const copy = [...prev];
-          copy[i] = { ...t, status: nextStatus, occupancy: Math.min(98, Math.max(10, (t.occupancy || 30) + (nextStatus === "Delayed" ? 12 : nextStatus === "Stopped" ? 25 : -8) + Math.round(Math.random() * 12 - 6))) };
+        const i = Math.floor(Math.random() * prev.length);
+        const t = prev[i];
+        const nextStatus = Math.random() < 0.6 ? "On-time" : Math.random() < 0.5 ? "Delayed" : "Stopped";
+        const copy = [...prev];
+        copy[i] = { ...t, status: nextStatus, occupancy: Math.min(98, Math.max(10, (t.occupancy || 30) + (nextStatus === "Delayed" ? 12 : nextStatus === "Stopped" ? 25 : -8) + Math.round(Math.random() * 12 - 6))) };
 
-          // notify
-          if (nextStatus === "Delayed") {
-            toast.warning(`${t.name} (${t.id}) delayed`, { description: `Predicted delay on path ${t.path}` });
-            beep(440, 0.08, 0.03);
-          } else if (nextStatus === "Stopped") {
-            toast.error(`${t.name} (${t.id}) stopped`, { description: `Emergency stop detected` });
-            beep(220, 0.12, 0.05);
-          } else {
-            toast.success(`${t.name} (${t.id}) on-time`);
-            beep(880, 0.06, 0.02);
-          }
-
-          return copy;
+        // notify
+        if (nextStatus === "Delayed") {
+          toast.warning(`${t.name} (${t.id}) delayed`, { description: `Predicted delay on path ${t.path}` });
+          beep(440, 0.08, 0.03);
+        } else if (nextStatus === "Stopped") {
+          toast.error(`${t.name} (${t.id}) stopped`, { description: `Emergency stop detected` });
+          beep(220, 0.12, 0.05);
+        } else {
+          toast.success(`${t.name} (${t.id}) on-time`);
+          beep(880, 0.06, 0.02);
         }
-        return prev;
+
+        return copy;
       });
-    }, 7000);
+    }, 5000);
     return () => clearInterval(id);
   }, [beep]);
 
