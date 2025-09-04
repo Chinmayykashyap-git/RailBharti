@@ -61,6 +61,7 @@ export default function Hero() {
 }
 
 function AIHelper() {
+  const beep = useBeep();
   return (
     <button
       onClick={() => {
