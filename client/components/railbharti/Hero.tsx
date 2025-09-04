@@ -28,7 +28,7 @@ export default function Hero() {
           <div>
             <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
               <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                RailBharti
+                Railभारती
               </span>{" "}
               — Indian Rail Essence
             </h1>
