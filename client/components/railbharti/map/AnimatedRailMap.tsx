@@ -288,10 +288,13 @@ export default function AnimatedRailMap({
         if (dist < 16) {
           const last = lastCrossRef.current[id] || 0;
           const now = Date.now();
-          if (now - last > 8000) {
-            // announce arrival
-            toast(`${t.name} arriving ${s.name}`, { description: `${t.id} - occupancy ${t.occupancy}%` });
-            beep(880, 0.06, 0.03);
+          // increase per-train station announce cooldown to reduce spam
+          if (now - last > 20000) {
+            // announce arrival (throttled globally as well)
+            maybeNotify(() => {
+              toast(`${t.name} arriving ${s.name}`, { description: `${t.id} - occupancy ${t.occupancy}%` });
+              beep(880, 0.06, 0.03);
+            });
             lastCrossRef.current[id] = now;
           }
         }
