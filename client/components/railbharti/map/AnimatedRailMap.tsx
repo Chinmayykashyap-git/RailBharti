@@ -128,16 +128,22 @@ export default function AnimatedRailMap({
         const copy = [...prev];
         copy[i] = { ...t, status: nextStatus, occupancy: Math.min(98, Math.max(10, (t.occupancy || 30) + (nextStatus === "Delayed" ? 12 : nextStatus === "Stopped" ? 25 : -8) + Math.round(Math.random() * 12 - 6))) };
 
-        // notify
+        // notify (throttled)
         if (nextStatus === "Delayed") {
-          toast.warning(`${t.name} (${t.id}) delayed`, { description: `Predicted delay on path ${t.path}` });
-          beep(440, 0.08, 0.03);
+          maybeNotify(() => {
+            toast.warning(`${t.name} (${t.id}) delayed`, { description: `Predicted delay on path ${t.path}` });
+            beep(440, 0.08, 0.03);
+          });
         } else if (nextStatus === "Stopped") {
-          toast.error(`${t.name} (${t.id}) stopped`, { description: `Emergency stop detected` });
-          beep(220, 0.12, 0.05);
+          maybeNotify(() => {
+            toast.error(`${t.name} (${t.id}) stopped`, { description: `Emergency stop detected` });
+            beep(220, 0.12, 0.05);
+          });
         } else {
-          toast.success(`${t.name} (${t.id}) on-time`);
-          beep(880, 0.06, 0.02);
+          maybeNotify(() => {
+            toast.success(`${t.name} (${t.id}) on-time`);
+            beep(880, 0.06, 0.02);
+          });
         }
 
         return copy;
