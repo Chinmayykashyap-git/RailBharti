@@ -283,6 +283,8 @@ export default function AnimatedRailMap({
     });
   }, [trains, beep]);
 
+  const popupPos = hoveredStation ? svgPointToScreen(hoveredStation.x || 0, hoveredStation.y || 0) : { left: 0, top: 0 };
+
   return (
     <div
       ref={containerRef}
@@ -443,10 +445,7 @@ export default function AnimatedRailMap({
       {hoveredStation && (
         <div
           className="absolute z-50 pointer-events-auto"
-          style={() => {
-            const screen = svgPointToScreen(hoveredStation.x || 0, hoveredStation.y || 0);
-            return { left: screen.left + 8, top: screen.top - 40 } as any;
-          }}
+          style={{ left: popupPos.left + 8, top: popupPos.top - 40 } as any}
         >
           <div className="rounded-md bg-card/90 border border-border/60 p-3 shadow-lg w-44 text-sm text-muted-foreground">
             <div className="font-semibold text-foreground">{hoveredStation.name}</div>
