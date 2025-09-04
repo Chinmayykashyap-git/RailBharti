@@ -66,6 +66,19 @@ export default function AnimatedRailMap({
 
   const beep = useBeep();
 
+  // global toast throttle to avoid flooding the UI
+  const lastToastRef = useRef<number>(0);
+  const TOAST_MIN_INTERVAL = 6000; // ms - min time between toasts shown
+  const maybeNotify = (fn: () => void) => {
+    const now = Date.now();
+    if (now - lastToastRef.current >= TOAST_MIN_INTERVAL) {
+      try {
+        fn();
+      } catch {}
+      lastToastRef.current = now;
+    }
+  };
+
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const drag = useRef<{ x: number; y: number } | null>(null);
