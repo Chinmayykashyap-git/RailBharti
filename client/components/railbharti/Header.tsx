@@ -22,12 +22,6 @@ export function SiteHeader() {
           <span className="text-xl md:text-2xl font-extrabold tracking-wide bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-shadow">
             RailBharti
           </span>
-          <span
-            className="text-2xl translate-y-[-1px] animate-float"
-            aria-hidden
-          >
-            🚆
-          </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -35,14 +29,30 @@ export function SiteHeader() {
             <NavLink
               key={n.to}
               to={n.to}
-              className={({ isActive }) =>
+              className={() =>
                 cn(
                   "px-3 py-2 text-sm rounded-md transition-colors",
                   "hover:text-primary",
-                  isActive || pathname === n.to
-                    ? "text-primary neon-glow-cyan bg-secondary/50"
-                    : "text-muted-foreground",
+                  "text-muted-foreground",
                 )
+              }
+              style={({ isActive }) =>
+                isActive || pathname === n.to
+                  ? {
+                      backgroundColor: "rgba(26,32,46,0.5)",
+                      borderRadius: "7.6px",
+                      boxShadow:
+                        "rgba(0, 247, 255, 0.6) 0px 0px 8px 0px, rgba(0, 247, 255, 0.4) 0px 0px 20px 0px, rgba(0, 247, 255, 0.25) 0px 0px 40px 0px",
+                      color: "rgb(0, 247, 255)",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      lineHeight: "20px",
+                      transitionDuration: "0.15s",
+                      transitionProperty:
+                        "color, background-color, border-color, text-decoration-color, fill, stroke",
+                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                    }
+                  : undefined
               }
             >
               {n.label}
@@ -99,13 +109,29 @@ export function SiteHeader() {
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className={({ isActive }) =>
+                className={() =>
                   cn(
                     "px-3 py-2 rounded-md",
-                    isActive || pathname === n.to
-                      ? "text-primary neon-glow-cyan bg-secondary/50"
-                      : "text-muted-foreground hover:text-primary",
+                    "text-muted-foreground hover:text-primary",
                   )
+                }
+                style={({ isActive }) =>
+                  isActive || pathname === n.to
+                    ? {
+                        backgroundColor: "rgba(26,32,46,0.5)",
+                        borderRadius: "7.6px",
+                        boxShadow:
+                          "rgba(0, 247, 255, 0.6) 0px 0px 8px 0px, rgba(0, 247, 255, 0.4) 0px 0px 20px 0px, rgba(0, 247, 255, 0.25) 0px 0px 40px 0px",
+                        color: "rgb(0, 247, 255)",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "20px",
+                        transitionDuration: "0.15s",
+                        transitionProperty:
+                          "color, background-color, border-color, text-decoration-color, fill, stroke",
+                        transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                      }
+                    : undefined
                 }
               >
                 {n.label}
