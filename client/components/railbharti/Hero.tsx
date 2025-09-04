@@ -3,10 +3,12 @@ import AnimatedRailMap from "./map/AnimatedRailMap";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useBeep } from "@/hooks/useAudio";
 
 export default function Hero() {
   const [query, setQuery] = useState("");
   const [highlightId, setHighlightId] = useState<string | null>(null);
+  const beep = useBeep();
 
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,6 +18,7 @@ export default function Hero() {
     toast.success(`Focusing train ${id}`, {
       description: "Zooming to the train on map",
     });
+    beep(1200, 0.08, 0.04);
   };
 
   return (
@@ -60,15 +63,20 @@ export default function Hero() {
 function AIHelper() {
   return (
     <button
-      onClick={() =>
+      onClick={() => {
+        beep(660, 0.1, 0.04);
         toast("AI Tip", {
-          description: "Predicted congestion on Path A near Bhopal. Reroute Rajdhani via Ajmer.",
+          description:
+            "Predicted congestion on Path A near Bhopal. Reroute Rajdhani via Ajmer.",
           action: {
             label: "Reroute",
-            onClick: () => toast.success("Rerouted successfully"),
+            onClick: () => {
+              beep(990, 0.08, 0.04);
+              toast.success("Rerouted successfully");
+            },
           },
-        })
-      }
+        });
+      }}
       className={cn(
         "relative rounded-full bg-secondary/70 border border-border/60 p-3 text-accent",
         "hover:bg-secondary/90 transition-colors animate-pulse-glow",
