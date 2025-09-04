@@ -20,7 +20,7 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="group inline-flex items-center gap-2">
           <span className="text-xl md:text-2xl font-extrabold tracking-wide bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-shadow">
-            RailBharti
+            Railभारती
           </span>
         </Link>
 
