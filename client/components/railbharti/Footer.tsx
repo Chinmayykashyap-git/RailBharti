@@ -8,7 +8,7 @@ export function SiteFooter() {
       <div className="container py-10 grid gap-8 md:grid-cols-3">
         <div>
           <div className="font-extrabold text-lg bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-            RailBharti 🚆
+            Railभारती 🚆
           </div>
           <p className="mt-3 text-sm text-muted-foreground max-w-sm">
             Indian Rail Essence — a futuristic, interactive prototype for real-time train tracking and AI-powered insights.
@@ -39,7 +39,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border/50">
         <div className="container py-4 text-xs text-muted-foreground flex items-center justify-between">
-          <span>© {new Date().getFullYear()} RailBharti</span>
+          <span>�� {new Date().getFullYear()} Railभारती</span>
           <nav className="flex gap-4">
             <Link to="/about" className="hover:text-primary">About</Link>
             <Link to="/contact" className="hover:text-primary">Contact</Link>
